@@ -23,20 +23,36 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
 {
     if (OpenDialog1->Execute())
     {
-        TJPEGImage *JPEGImage = new TJPEGImage();
-        try
+        TGraphic *Graphic = nullptr;
+        String FileExt = ExtractFileExt(OpenDialog1->FileName).LowerCase();
+
+        if (FileExt == ".bmp")
+            Graphic = new TBitmap();
+        else if (FileExt == ".jpg" || FileExt == ".jpeg")
+            Graphic = new TJPEGImage();
+        else if (FileExt == ".png")
+            Graphic = new TPngImage();
+
+        if (Graphic)
         {
-            JPEGImage->LoadFromFile(OpenDialog1->FileName);
-            OriginalBitmap->Assign(JPEGImage);  // Konwertuj JPEG na Bitmap
-            Image1->Picture->Bitmap->Assign(OriginalBitmap);
-            Image1->Width = Image1->Picture->Width;
-            Image1->Height = Image1->Picture->Height;
-            ScaleFactor = 1.0;
-            Image1->Repaint();
+            try
+            {
+                Graphic->LoadFromFile(OpenDialog1->FileName);
+                OriginalBitmap->Assign(Graphic);
+                Image1->Picture->Bitmap->Assign(OriginalBitmap);
+                Image1->Width = Image1->Picture->Width;
+                Image1->Height = Image1->Picture->Height;
+                ScaleFactor = 1.0;
+                Image1->Repaint();
+            }
+            __finally
+            {
+                delete Graphic;
+            }
         }
-        __finally
+        else
         {
-            delete JPEGImage;
+            ShowMessage("Unsupported image format.");
         }
     }
 }

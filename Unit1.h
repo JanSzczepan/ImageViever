@@ -12,6 +12,9 @@
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Menus.hpp>
 #include <jpeg.hpp>
+#include <pngimage.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
+#include <Vcl.Imaging.jpeg.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
