@@ -19,20 +19,18 @@ __fastcall TForm1::~TForm1()
     delete OriginalBitmap;
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Open1Click(TObject *Sender)
+void __fastcall TForm1::OpenImage(TObject *Sender)
 {
     if (OpenDialog1->Execute())
     {
         TGraphic *Graphic = nullptr;
         String FileExt = ExtractFileExt(OpenDialog1->FileName).LowerCase();
-
         if (FileExt == ".bmp")
             Graphic = new TBitmap();
         else if (FileExt == ".jpg" || FileExt == ".jpeg")
             Graphic = new TJPEGImage();
         else if (FileExt == ".png")
             Graphic = new TPngImage();
-
         if (Graphic)
         {
             try
@@ -58,7 +56,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Open2Click(TObject *Sender)
+void __fastcall TForm1::SaveImage(TObject *Sender)
 {
 	if (SaveDialog1->Execute())
     {
@@ -66,7 +64,7 @@ void __fastcall TForm1::Open2Click(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button1Click(TObject *Sender)
+void __fastcall TForm1::RotateImageLeft(TObject *Sender)
 {
 	TBitmap *Bitmap = new TBitmap();
 		try
@@ -92,7 +90,7 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button2Click(TObject *Sender)
+void __fastcall TForm1::RotateImageRight(TObject *Sender)
 {
 	TBitmap *Bitmap = new TBitmap();
 		try
@@ -118,27 +116,6 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button3Click(TObject *Sender)
-{
-	double ScaleFactor = 0.5;
-    TBitmap *Bitmap = new TBitmap();
-    try
-    {
-        Bitmap->Assign(Image1->Picture->Graphic);
-        TBitmap *ScaledBitmap = new TBitmap();
-        ScaledBitmap->Width = Bitmap->Width * ScaleFactor;
-        ScaledBitmap->Height = Bitmap->Height * ScaleFactor;
-        ScaledBitmap->Canvas->StretchDraw(Rect(0, 0, ScaledBitmap->Width, ScaledBitmap->Height), Bitmap);
-        Image1->Picture->Assign(ScaledBitmap);
-        delete ScaledBitmap;
-    }
-    __finally
-    {
-        delete Bitmap;
-	}
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     Dragging = true;
@@ -146,7 +123,6 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button, TS
     StartY = Y;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y)
 {
     if (Dragging)
@@ -158,14 +134,13 @@ void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int 
     }
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     Dragging = false;
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::ScaleImage(double Factor)
+void __fastcall TForm1::ApplyScale(double Factor)
 {
     ScaleFactor *= Factor;
     int NewWidth = static_cast<int>(OriginalBitmap->Width * ScaleFactor);
@@ -187,15 +162,15 @@ void __fastcall TForm1::ScaleImage(double Factor)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::ButtonScaleUpClick(TObject *Sender)
+void __fastcall TForm1::ScaleImageUp(TObject *Sender)
 {
-	ScaleImage(1.1);
+	ApplyScale(1.1);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::ButtonScaleDownClick(TObject *Sender)
+void __fastcall TForm1::ScaleImageDown(TObject *Sender)
 {
-	ScaleImage(0.9);
+	ApplyScale(0.9);
 }
 //---------------------------------------------------------------------------
 

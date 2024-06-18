@@ -26,7 +26,7 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 0
     Top = 432
-    Width = 521
+    Width = 762
     Height = 41
     TabOrder = 0
     object Button1: TButton
@@ -36,7 +36,7 @@ object Form1: TForm1
       Height = 25
       Caption = 'Rotate Left'
       TabOrder = 0
-      OnClick = Button1Click
+      OnClick = RotateImageLeft
     end
     object Button2: TButton
       Left = 87
@@ -45,42 +45,33 @@ object Form1: TForm1
       Height = 25
       Caption = 'Rotate Right'
       TabOrder = 1
-      OnClick = Button2Click
+      OnClick = RotateImageRight
     end
-    object Button3: TButton
+    object Button4: TButton
       Left = 168
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Scale'
+      Caption = 'Crop'
       TabOrder = 2
-      OnClick = Button3Click
     end
-    object Button4: TButton
+    object ButtonScaleUp: TButton
       Left = 249
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Crop'
-      TabOrder = 3
-    end
-    object ButtonScaleUp: TButton
-      Left = 344
-      Top = 8
-      Width = 75
-      Height = 25
       Caption = 'Scale Up'
-      TabOrder = 4
-      OnClick = ButtonScaleUpClick
+      TabOrder = 3
+      OnClick = ScaleImageUp
     end
     object ButtonScaleDown: TButton
-      Left = 432
+      Left = 330
       Top = 8
       Width = 75
       Height = 25
       Caption = 'Scale Down'
-      TabOrder = 5
-      OnClick = ButtonScaleDownClick
+      TabOrder = 4
+      OnClick = ScaleImageDown
     end
   end
   object StatusBar1: TStatusBar
@@ -99,11 +90,11 @@ object Form1: TForm1
       Caption = 'File'
       object Open1: TMenuItem
         Caption = 'Open'
-        OnClick = Open1Click
+        OnClick = OpenImage
       end
       object Open2: TMenuItem
         Caption = 'Save'
-        OnClick = Open2Click
+        OnClick = SaveImage
       end
       object Exit1: TMenuItem
         Caption = 'Exit'
