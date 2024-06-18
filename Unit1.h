@@ -39,31 +39,37 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	TButton *Button4;
 	TButton *ButtonScaleUp;
-	TButton *ButtonScaleDown;
+	TButton *ButtonScaleDown; // Dodanie przycisku przycinania
 	void __fastcall OpenImage(TObject *Sender);
 	void __fastcall SaveImage(TObject *Sender);
 	void __fastcall RotateImageLeft(TObject *Sender);
 	void __fastcall RotateImageRight(TObject *Sender);
-	void __fastcall Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
-          int X, int Y);
+	void __fastcall Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
-	void __fastcall Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
-		  int X, int Y);
+	void __fastcall Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall ScaleImageUp(TObject *Sender);
 	void __fastcall ScaleImageDown(TObject *Sender);
+	void __fastcall ButtonCropClick(TObject *Sender); // Deklaracja funkcji przycinania
 
 private:
 	bool Dragging;
-    int StartX, StartY;
+	bool Cropping; // Dodanie flagi przycinania
+	int StartX, StartY;
 	int ImageOffsetX, ImageOffsetY;
 	double ScaleFactor;
+	int CropStartX, CropStartY, CropEndX, CropEndY; // Dodanie zmiennych przycinania
 	void __fastcall ApplyScale(double Factor);
+	void __fastcall DrawCropRect(); // Deklaracja funkcji rysowania prostok¹ta przycinania
+	void __fastcall ApplyCrop(); // Deklaracja funkcji stosowania przyciêcia
+	void __fastcall StartCropping(TObject *Sender); // Deklaracja funkcji rozpoczynaj¹cej przycinanie
 	TBitmap *OriginalBitmap;
+
 public:
 	__fastcall TForm1(TComponent* Owner);
-    __fastcall ~TForm1();
+	__fastcall ~TForm1();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
 //---------------------------------------------------------------------------
 #endif
+

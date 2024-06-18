@@ -4,6 +4,9 @@
 #pragma hdrstop
 
 #include "Unit1.h"
+
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#define max(a, b) ((a) > (b) ? (a) : (b))
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -116,16 +119,47 @@ void __fastcall TForm1::RotateImageRight(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::StartCropping(TObject *Sender)
+{
+    Cropping = true;
+    StatusBar1->SimpleText = "Select area to crop.";
+}
+
+void __fastcall TForm1::DrawCropRect()
+{
+    if (Cropping)
+    {
+        Image1->Canvas->Pen->Style = psDash;
+        Image1->Canvas->Brush->Style = bsClear;
+        Image1->Canvas->Rectangle(CropStartX, CropStartY, CropEndX, CropEndY);
+    }
+}
+
 void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-    Dragging = true;
-    StartX = X;
-    StartY = Y;
+    if (Cropping)
+    {
+        CropStartX = X;
+        CropStartY = Y;
+    }
+    else
+    {
+        Dragging = true;
+        StartX = X;
+        StartY = Y;
+    }
 }
-//---------------------------------------------------------------------------
+
 void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y)
 {
-    if (Dragging)
+    if (Cropping)
+    {
+        CropEndX = X;
+        CropEndY = Y;
+        Image1->Repaint();
+        DrawCropRect();
+    }
+    else if (Dragging)
     {
         ImageOffsetX += X - StartX;
         ImageOffsetY += Y - StartY;
@@ -133,12 +167,60 @@ void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int 
         Image1->Top = ImageOffsetY;
     }
 }
-//---------------------------------------------------------------------------
+
 void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-    Dragging = false;
+    if (Cropping)
+    {
+        CropEndX = X;
+        CropEndY = Y;
+        Cropping = false;
+        ApplyCrop();
+        StatusBar1->SimpleText = "";
+    }
+    else
+    {
+        Dragging = false;
+    }
 }
-//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ButtonCropClick(TObject *Sender)
+{
+    StartCropping(Sender);
+}
+
+// Dodaj funkcjê stosuj¹c¹ przyciêcie
+void __fastcall TForm1::ApplyCrop()
+{
+    if (CropStartX != CropEndX && CropStartY != CropEndY)
+    {
+        TRect CropRect(
+            min(CropStartX, CropEndX),
+            min(CropStartY, CropEndY),
+            max(CropStartX, CropEndX),
+            max(CropStartY, CropEndY)
+        );
+
+        TBitmap *CroppedBitmap = new TBitmap();
+        try
+        {
+            CroppedBitmap->SetSize(CropRect.Width(), CropRect.Height());
+            CroppedBitmap->Canvas->CopyRect(
+                Rect(0, 0, CropRect.Width(), CropRect.Height()),
+                Image1->Picture->Bitmap->Canvas,
+                CropRect
+            );
+            Image1->Picture->Bitmap->Assign(CroppedBitmap);
+            Image1->Width = CroppedBitmap->Width;
+            Image1->Height = CroppedBitmap->Height;
+            Image1->Repaint();
+        }
+        __finally
+        {
+            delete CroppedBitmap;
+        }
+    }
+}
 
 void __fastcall TForm1::ApplyScale(double Factor)
 {
