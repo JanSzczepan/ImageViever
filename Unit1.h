@@ -56,9 +56,11 @@ private:
     int StartX, StartY;
 	int ImageOffsetX, ImageOffsetY;
 	double ScaleFactor;
-    void __fastcall ScaleImage(double Factor);
+	void __fastcall ScaleImage(double Factor);
+    TBitmap *OriginalBitmap;
 public:
 	__fastcall TForm1(TComponent* Owner);
+    __fastcall ~TForm1();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

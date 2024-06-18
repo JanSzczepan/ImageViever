@@ -12,15 +12,35 @@ TForm1 *Form1;
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner), Dragging(false), ImageOffsetX(0), ImageOffsetY(0), ScaleFactor(1.0)
 {
+	OriginalBitmap = new TBitmap();
+}
+__fastcall TForm1::~TForm1()
+{
+    delete OriginalBitmap;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Open1Click(TObject *Sender)
 {
-	if (OpenDialog1->Execute())
-	{
-		Image1->Picture->LoadFromFile(OpenDialog1->FileName);
-	}
+    if (OpenDialog1->Execute())
+    {
+        TJPEGImage *JPEGImage = new TJPEGImage();
+        try
+        {
+            JPEGImage->LoadFromFile(OpenDialog1->FileName);
+            OriginalBitmap->Assign(JPEGImage);  // Konwertuj JPEG na Bitmap
+            Image1->Picture->Bitmap->Assign(OriginalBitmap);
+            Image1->Width = Image1->Picture->Width;
+            Image1->Height = Image1->Picture->Height;
+            ScaleFactor = 1.0;
+            Image1->Repaint();
+        }
+        __finally
+        {
+            delete JPEGImage;
+        }
+    }
 }
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Open2Click(TObject *Sender)
 {
@@ -131,24 +151,22 @@ void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button, TShi
 
 void __fastcall TForm1::ScaleImage(double Factor)
 {
-    TBitmap *Bitmap = new TBitmap();
+    ScaleFactor *= Factor;
+    int NewWidth = static_cast<int>(OriginalBitmap->Width * ScaleFactor);
+    int NewHeight = static_cast<int>(OriginalBitmap->Height * ScaleFactor);
+    TBitmap *ScaledBitmap = new TBitmap();
     try
     {
-        Bitmap->Assign(Image1->Picture->Graphic);
-        int NewWidth = static_cast<int>(Bitmap->Width * Factor);
-        int NewHeight = static_cast<int>(Bitmap->Height * Factor);
-        TBitmap *ScaledBitmap = new TBitmap();
         ScaledBitmap->SetSize(NewWidth, NewHeight);
-        ScaledBitmap->Canvas->StretchDraw(Rect(0, 0, NewWidth, NewHeight), Bitmap);
+        ScaledBitmap->Canvas->StretchDraw(Rect(0, 0, NewWidth, NewHeight), OriginalBitmap);
         Image1->Picture->Bitmap->Assign(ScaledBitmap);
         Image1->Width = NewWidth;
         Image1->Height = NewHeight;
         Image1->Repaint();
-        delete ScaledBitmap;
     }
     __finally
     {
-        delete Bitmap;
+        delete ScaledBitmap;
     }
 }
 //---------------------------------------------------------------------------
