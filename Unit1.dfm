@@ -26,11 +26,11 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 0
     Top = 432
-    Width = 329
+    Width = 521
     Height = 41
     TabOrder = 0
     object Button1: TButton
-      Left = 89
+      Left = 6
       Top = 8
       Width = 75
       Height = 25
@@ -39,7 +39,7 @@ object Form1: TForm1
       OnClick = Button1Click
     end
     object Button2: TButton
-      Left = 8
+      Left = 87
       Top = 8
       Width = 75
       Height = 25
@@ -63,6 +63,24 @@ object Form1: TForm1
       Height = 25
       Caption = 'Crop'
       TabOrder = 3
+    end
+    object ButtonScaleUp: TButton
+      Left = 344
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Scale Up'
+      TabOrder = 4
+      OnClick = ButtonScaleUpClick
+    end
+    object ButtonScaleDown: TButton
+      Left = 432
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Scale Down'
+      TabOrder = 5
+      OnClick = ButtonScaleDownClick
     end
   end
   object StatusBar1: TStatusBar

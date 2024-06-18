@@ -10,7 +10,7 @@
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-    : TForm(Owner), Dragging(false), ImageOffsetX(0), ImageOffsetY(0)
+    : TForm(Owner), Dragging(false), ImageOffsetX(0), ImageOffsetY(0), ScaleFactor(1.0)
 {
 }
 //---------------------------------------------------------------------------
@@ -128,3 +128,40 @@ void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button, TShi
     Dragging = false;
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TForm1::ScaleImage(double Factor)
+{
+    TBitmap *Bitmap = new TBitmap();
+    try
+    {
+        Bitmap->Assign(Image1->Picture->Graphic);
+        int NewWidth = static_cast<int>(Bitmap->Width * Factor);
+        int NewHeight = static_cast<int>(Bitmap->Height * Factor);
+        TBitmap *ScaledBitmap = new TBitmap();
+        ScaledBitmap->SetSize(NewWidth, NewHeight);
+        ScaledBitmap->Canvas->StretchDraw(Rect(0, 0, NewWidth, NewHeight), Bitmap);
+        Image1->Picture->Bitmap->Assign(ScaledBitmap);
+        Image1->Width = NewWidth;
+        Image1->Height = NewHeight;
+        Image1->Repaint();
+        delete ScaledBitmap;
+    }
+    __finally
+    {
+        delete Bitmap;
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ButtonScaleUpClick(TObject *Sender)
+{
+	ScaleImage(1.1);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ButtonScaleDownClick(TObject *Sender)
+{
+	ScaleImage(0.9);
+}
+//---------------------------------------------------------------------------
+

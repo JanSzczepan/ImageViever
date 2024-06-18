@@ -36,6 +36,8 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	TButton *Button3;
 	TButton *Button4;
+	TButton *ButtonScaleUp;
+	TButton *ButtonScaleDown;
 	void __fastcall Open1Click(TObject *Sender);
 	void __fastcall Open2Click(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
@@ -46,11 +48,15 @@ __published:	// IDE-managed Components
 	void __fastcall Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
 	void __fastcall Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y);
+	void __fastcall ButtonScaleUpClick(TObject *Sender);
+	void __fastcall ButtonScaleDownClick(TObject *Sender);
 
 private:
 	bool Dragging;
     int StartX, StartY;
-    int ImageOffsetX, ImageOffsetY;
+	int ImageOffsetX, ImageOffsetY;
+	double ScaleFactor;
+    void __fastcall ScaleImage(double Factor);
 public:
 	__fastcall TForm1(TComponent* Owner);
 };
