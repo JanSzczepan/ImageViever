@@ -10,7 +10,7 @@
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner)
+    : TForm(Owner), Dragging(false), ImageOffsetX(0), ImageOffsetY(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -82,3 +82,49 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+	double ScaleFactor = 0.5;
+    TBitmap *Bitmap = new TBitmap();
+    try
+    {
+        Bitmap->Assign(Image1->Picture->Graphic);
+        TBitmap *ScaledBitmap = new TBitmap();
+        ScaledBitmap->Width = Bitmap->Width * ScaleFactor;
+        ScaledBitmap->Height = Bitmap->Height * ScaleFactor;
+        ScaledBitmap->Canvas->StretchDraw(Rect(0, 0, ScaledBitmap->Width, ScaledBitmap->Height), Bitmap);
+        Image1->Picture->Assign(ScaledBitmap);
+        delete ScaledBitmap;
+    }
+    __finally
+    {
+        delete Bitmap;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    Dragging = true;
+    StartX = X;
+    StartY = Y;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y)
+{
+    if (Dragging)
+    {
+        ImageOffsetX += X - StartX;
+        ImageOffsetY += Y - StartY;
+        Image1->Left = ImageOffsetX;
+        Image1->Top = ImageOffsetY;
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    Dragging = false;
+}
+//---------------------------------------------------------------------------

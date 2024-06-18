@@ -40,8 +40,18 @@ __published:	// IDE-managed Components
 	void __fastcall Open2Click(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
-private:	// User declarations
-public:		// User declarations
+	void __fastcall Button3Click(TObject *Sender);
+	void __fastcall Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall Image1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+	void __fastcall Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
+		  int X, int Y);
+
+private:
+	bool Dragging;
+    int StartX, StartY;
+    int ImageOffsetX, ImageOffsetY;
+public:
 	__fastcall TForm1(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

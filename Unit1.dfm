@@ -19,6 +19,9 @@ object Form1: TForm1
     Height = 402
     Proportional = True
     Stretch = True
+    OnMouseDown = Image1MouseDown
+    OnMouseMove = Image1MouseMove
+    OnMouseUp = Image1MouseUp
   end
   object Panel1: TPanel
     Left = 0
@@ -51,6 +54,7 @@ object Form1: TForm1
       Height = 25
       Caption = 'Scale'
       TabOrder = 2
+      OnClick = Button3Click
     end
     object Button4: TButton
       Left = 249
@@ -67,8 +71,8 @@ object Form1: TForm1
     Width = 762
     Height = 19
     Panels = <>
-    ExplicitTop = 446
-    ExplicitWidth = 787
+    ExplicitTop = 493
+    ExplicitWidth = 758
   end
   object MainMenu1: TMainMenu
     Left = 656
