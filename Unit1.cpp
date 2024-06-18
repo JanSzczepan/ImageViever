@@ -13,13 +13,17 @@
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-    : TForm(Owner), Dragging(false), ImageOffsetX(0), ImageOffsetY(0), ScaleFactor(1.0)
+    : TForm(Owner), Dragging(false), IsCropped(false), ImageOffsetX(0), ImageOffsetY(0), ScaleFactor(1.0)
 {
 	OriginalBitmap = new TBitmap();
+	TempBitmap = new TBitmap();
+    CropBitmap = new TBitmap();
 }
 __fastcall TForm1::~TForm1()
 {
-    delete OriginalBitmap;
+	delete OriginalBitmap;
+	delete TempBitmap;
+    delete CropBitmap;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::OpenImage(TObject *Sender)
@@ -129,9 +133,16 @@ void __fastcall TForm1::DrawCropRect()
 {
     if (Cropping)
     {
-        Image1->Canvas->Pen->Style = psDash;
-        Image1->Canvas->Brush->Style = bsClear;
-        Image1->Canvas->Rectangle(CropStartX, CropStartY, CropEndX, CropEndY);
+        // Skopiuj oryginalny obraz do CropBitmap
+        CropBitmap->Assign(OriginalBitmap);
+
+        // Rysuj prostok¹t na CropBitmap
+        CropBitmap->Canvas->Pen->Style = psDash;
+        CropBitmap->Canvas->Brush->Style = bsClear;
+        CropBitmap->Canvas->Rectangle(CropStartX, CropStartY, CropEndX, CropEndY);
+
+        // Wyœwietl CropBitmap na Image1
+        Image1->Picture->Bitmap->Assign(CropBitmap);
     }
 }
 
@@ -141,6 +152,8 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button, TS
     {
         CropStartX = X;
         CropStartY = Y;
+        CropEndX = X;  // Resetowanie koñcowych wspó³rzêdnych
+        CropEndY = Y;  // Resetowanie koñcowych wspó³rzêdnych
     }
     else
     {
@@ -154,10 +167,10 @@ void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift, int 
 {
     if (Cropping)
     {
+        // Aktualizacja wspó³rzêdnych koñca prostok¹ta
         CropEndX = X;
         CropEndY = Y;
-        Image1->Repaint();
-        DrawCropRect();
+        DrawCropRect(); // Narysuj nowy prostok¹t przycinania
     }
     else if (Dragging)
     {
@@ -183,7 +196,6 @@ void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button, TShi
         Dragging = false;
     }
 }
-
 void __fastcall TForm1::ButtonCropClick(TObject *Sender)
 {
     StartCropping(Sender);
@@ -213,6 +225,11 @@ void __fastcall TForm1::ApplyCrop()
             Image1->Picture->Bitmap->Assign(CroppedBitmap);
             Image1->Width = CroppedBitmap->Width;
             Image1->Height = CroppedBitmap->Height;
+
+            // Zaktualizuj OriginalBitmap po przyciêciu
+            OriginalBitmap->Assign(CroppedBitmap);
+            IsCropped = true;
+
             Image1->Repaint();
         }
         __finally

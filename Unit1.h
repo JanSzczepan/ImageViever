@@ -39,7 +39,7 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	TButton *Button4;
 	TButton *ButtonScaleUp;
-	TButton *ButtonScaleDown; // Dodanie przycisku przycinania
+	TButton *ButtonScaleDown;
 	void __fastcall OpenImage(TObject *Sender);
 	void __fastcall SaveImage(TObject *Sender);
 	void __fastcall RotateImageLeft(TObject *Sender);
@@ -49,20 +49,23 @@ __published:	// IDE-managed Components
 	void __fastcall Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall ScaleImageUp(TObject *Sender);
 	void __fastcall ScaleImageDown(TObject *Sender);
-	void __fastcall ButtonCropClick(TObject *Sender); // Deklaracja funkcji przycinania
+	void __fastcall ButtonCropClick(TObject *Sender);
 
 private:
 	bool Dragging;
-	bool Cropping; // Dodanie flagi przycinania
+	bool Cropping;
+    bool IsCropped;
 	int StartX, StartY;
 	int ImageOffsetX, ImageOffsetY;
 	double ScaleFactor;
-	int CropStartX, CropStartY, CropEndX, CropEndY; // Dodanie zmiennych przycinania
+	int CropStartX, CropStartY, CropEndX, CropEndY;
 	void __fastcall ApplyScale(double Factor);
-	void __fastcall DrawCropRect(); // Deklaracja funkcji rysowania prostok¹ta przycinania
-	void __fastcall ApplyCrop(); // Deklaracja funkcji stosowania przyciêcia
-	void __fastcall StartCropping(TObject *Sender); // Deklaracja funkcji rozpoczynaj¹cej przycinanie
+	void __fastcall DrawCropRect();
+	void __fastcall ApplyCrop();
+	void __fastcall StartCropping(TObject *Sender);
 	TBitmap *OriginalBitmap;
+	TBitmap *TempBitmap;
+    TBitmap *CropBitmap;
 
 public:
 	__fastcall TForm1(TComponent* Owner);
