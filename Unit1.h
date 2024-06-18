@@ -1,8 +1,6 @@
-//---------------------------------------------------------------------------
-
 #ifndef Unit1H
 #define Unit1H
-//---------------------------------------------------------------------------
+
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.StdCtrls.hpp>
@@ -15,10 +13,10 @@
 #include <pngimage.hpp>
 #include <Vcl.Imaging.pngimage.hpp>
 #include <Vcl.Imaging.jpeg.hpp>
-//---------------------------------------------------------------------------
+
 class TForm1 : public TForm
 {
-__published:	// IDE-managed Components
+__published:
 	TMainMenu *MainMenu1;
 	TPanel *Panel1;
 	TImage *Image1;
@@ -71,8 +69,9 @@ public:
 	__fastcall TForm1(TComponent* Owner);
 	__fastcall ~TForm1();
 };
-//---------------------------------------------------------------------------
+
 extern PACKAGE TForm1 *Form1;
-//---------------------------------------------------------------------------
+
 #endif
+
 
