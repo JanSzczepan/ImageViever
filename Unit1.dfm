@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 513
-  ClientWidth = 762
+  ClientHeight = 815
+  ClientWidth = 1125
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,8 +15,8 @@ object Form1: TForm1
   object Image1: TImage
     Left = 0
     Top = 0
-    Width = 762
-    Height = 402
+    Width = 1117
+    Height = 768
     Proportional = True
     Stretch = True
     OnMouseDown = Image1MouseDown
@@ -25,8 +25,8 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 0
-    Top = 432
-    Width = 762
+    Top = 766
+    Width = 1110
     Height = 41
     TabOrder = 0
     object Button1: TButton
@@ -77,16 +77,16 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 494
-    Width = 762
+    Top = 796
+    Width = 1125
     Height = 19
     Panels = <>
     ExplicitTop = 493
     ExplicitWidth = 758
   end
   object MainMenu1: TMainMenu
-    Left = 656
-    Top = 448
+    Left = 696
+    Top = 224
     object Fil1: TMenuItem
       Caption = 'File'
       object Open1: TMenuItem
@@ -122,12 +122,12 @@ object Form1: TForm1
   end
   object OpenDialog1: TOpenDialog
     Filter = 'JPG files (*.jpg)|*.jpg|All files (*.*)|*.*'
-    Left = 712
-    Top = 448
+    Left = 752
+    Top = 224
   end
   object SaveDialog1: TSaveDialog
     Filter = 'JPG files (*.jpg)|*.jpg|All files (*.*)|*.*'
-    Left = 592
-    Top = 448
+    Left = 632
+    Top = 224
   end
 end
